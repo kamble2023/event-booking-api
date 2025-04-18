@@ -55,23 +55,24 @@ php artisan serve
 ---
 
 ## DB settings match the Docker setup:    
-- **DB_CONNECTION=mysql**
-- **DB_HOST=db**
-- **DB_PORT=3306**
-- **DB_DATABASE=event_booking**
-- **DB_USERNAME=root**
-- **DB_PASSWORD=secret**
-
+ ```
+  DB_CONNECTION=mysql
+  DB_HOST=db
+  DB_PORT=3306
+  DB_DATABASE=event_booking
+  DB_USERNAME=root
+  DB_PASSWORD=secret
+```
 ## Start Docker (Run in bash)
 - **docker-compose up -d --build**
 - **Access the app at: http://localhost:8000**
 
 ## Install Dependencies
-
-- **docker exec -it event_booking_app composer install**
-- **docker exec -it event_booking_app php artisan key:generate**
-- **docker exec -it event_booking_app php artisan migrate**
-
+```
+  docker exec -it event_booking_app composer install**
+  docker exec -it event_booking_app php artisan key:generate
+  docker exec -it event_booking_app php artisan migrate
+```
 ## Authentication
 
 - **API consumers must be authenticated to manage events.**
@@ -84,7 +85,7 @@ php artisan serve
   - php artisan test
 
 - **Postman Collection**
-- Import the provided Event Booking API.postman_collection.json into Postman for quick testing.
+  - Import the provided Event Booking API.postman_collection.json into Postman for quick testing.
 
 ## Assumptions
 - **No authentication middleware was added for brevity.**
