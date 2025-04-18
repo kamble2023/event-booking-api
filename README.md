@@ -31,10 +31,27 @@ A RESTful API built with Laravel for managing events, attendees, and bookings â€
 ## Project Setup
 
 ### 1. Clone the Repository
-bash
-git clone https://github.com/your-username/event-booking-api.git
+```bash
+git clone https://github.com/kamble2023/event-booking-api.git
 cd event-booking-api
 
+### 2. Install dependencies
+composer install
+
+#### 3. Create .env file
+cp .env.example .env
+
+
+### 4. Generate key
+php artisan key:generate 
+
+### Run migrations
+php artisan migrate
+
+### Run the server
+php artisan serve
+
+```
 ---
 
 ## DB settings match the Docker setup:    
@@ -47,6 +64,7 @@ cd event-booking-api
 
 ## Start Docker (Run in bash)
 - **docker-compose up -d --build**
+- **Access the app at: http://localhost:8000**
 
 ## Install Dependencies
 
@@ -54,6 +72,23 @@ cd event-booking-api
 - **docker exec -it event_booking_app php artisan key:generate**
 - **docker exec -it event_booking_app php artisan migrate**
 
+## Authentication
+
+- **API consumers must be authenticated to manage events.**
+- **Attendees can register and book without authentication.**
+- **Authentication system is not implemented but structure is modular to plug in Laravel Sanctum or Passport.**
+
 ## Unit Testing of the API's
 
-- Run the command in bash **php artisan test**
+- **Run the command in bash** 
+  - php artisan test
+
+- **Postman Collection**
+- Import the provided Event Booking API.postman_collection.json into Postman for quick testing.
+
+## Assumptions
+- **No authentication middleware was added for brevity.**
+- **Event enrichment is simulated using a mock service.**
+- **Each attendee can only book one spot per event.**
+- **An event has a capacity field that limits bookings.**
+
