@@ -19,6 +19,7 @@ class AttendeeController extends Controller
 
             $attendee = Attendee::create($validated);
             return response()->json($attendee, 201);
+            
         } catch (ValidationException $e) {
             return response()->json([
                 'errors' => $e->errors(),
