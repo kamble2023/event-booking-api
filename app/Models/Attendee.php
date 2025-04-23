@@ -15,4 +15,10 @@ class Attendee extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'bookings', 'attendee_id', 'event_id');
+    }
+
 }

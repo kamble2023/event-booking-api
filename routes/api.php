@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\BookingController;
+#use App\Services\BookingService;
 
 /*
 |--------------------------------------------------------------------------

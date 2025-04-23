@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->date('date');
             $table->string('country');
-            $table->integer('capacity');
+            $table->integer('capacity')->default(0);
             $table->timestamps();
         });
     }

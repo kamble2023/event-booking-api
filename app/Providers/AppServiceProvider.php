@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use App\Services\BookingService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // EventEnrichmentService
-        $this->app->bind(EventEnrichmentService::class);
+       
+        $this->app->bind(BookingService::class, function ($app) {
+            return new BookingService();
+        });
+
+         // EventEnrichmentService
+         $this->app->bind(EventEnrichmentService::class);
     }
 
     /**

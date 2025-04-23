@@ -2,56 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
-use App\Models\Event;
+use App\Http\Requests\StoreBookingRequest;
 use App\Models\Attendee;
-use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Services\BookingService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-#use App\Services\EventEnrichmentService;
+use App\Exceptions\OverbookingException;
 
 
 class BookingController extends Controller
 {
-    
-    public function store(Request $request)
-    { 
-        try{
+    protected $bookingService;
 
-            
-            $validated = $request->validate([
-                'event_id' => 'required|exists:events,id',
-                'attendee_id' => 'required|exists:attendees,id',
-            ]);
-        
-            $event = Event::find($validated['event_id']); 
+    public function __construct(BookingService $bookingService)
+    {    
+        $this->bookingService = $bookingService;
+    }
+
+    public function store(StoreBookingRequest $request): JsonResponse
+    {
+
+        try {
+
+            $validated = $request->validated();
+
+            $event = Event::findOrFail($validated['event_id']);
             $attendee = Attendee::findOrFail($validated['attendee_id']);
-            
-            $attendeeId = $validated['attendee_id'];
-                    
-            if (!$event) {
-                return response()->json([
-                    'message' => 'The selected event does not exist.'
-                ], 404);
-            }
-            //$event = $enrichmentService->process($event);
-            // Check for duplicate booking
-            if (Booking::where('event_id', $event->id)->where('attendee_id', $attendeeId)->exists()) {
-                return response()->json(['error' => 'Attendee already booked for this event.'], 409);
-            }
 
-            // Check event capacity
-            $currentBookings = Booking::where('event_id', $event->id)->count();
-            if ($currentBookings >= $event->capacity) {
-                return response()->json(['error' => 'Event is fully booked.'], 409);
-            }
+            $booking = $this->bookingService->bookEvent($event, $attendee);
 
-            $booking = Booking::create($validated);
-            return response()->json($booking, 201);
-            
-        } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->errors(),
-            ], 422);
+                'success' => true,
+                'message' => 'Booking successful.',
+                'data' => $booking,
+            ], 201);
+
+
+        }  catch (OverbookingException $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 409);
+        } catch (ValidationException $e) {
+           
+            if ($e->getMessage() === 'Attendee already booked this event') {
+                return response()->json(['message' => 'Duplicate booking not allowed'], 409);
+            }
+            throw $e;
         }
+           
     }
 }
+

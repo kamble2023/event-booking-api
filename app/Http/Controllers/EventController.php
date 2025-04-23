@@ -3,11 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Services\EventService;
 use Illuminate\Http\Request;
 
 
 class EventController extends Controller
 {
+    protected $eventService;
+
+    // Injecting EventService into the controller via constructor
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService; // Assign the injected service to the $eventService property
+    }
+
     public function index(Request $request)
     {
         
@@ -77,17 +86,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        if (!$event) {
-            return response()->json([
-                'message' => 'Event not found.'
-            ], 404);
-        }
-
-        $event->delete();
-
-        return response()->json([
-            'message' => 'Event deleted successfully.'
-        ], 204);
-        
+        $this->eventService->delete($event);
+        return response()->json(['message' => 'Deleted'], 204);
     }
 }

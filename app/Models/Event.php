@@ -32,4 +32,9 @@ class Event extends Model
         });
     }
 
+    public function attendees()
+    {
+        return $this->belongsToMany(Attendee::class, 'bookings', 'event_id', 'attendee_id');
+    }
+
 }
