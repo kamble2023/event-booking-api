@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # If the requested file or directory actually exists, serve it directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Strip the base path so the front-controller only sees the route portion
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>

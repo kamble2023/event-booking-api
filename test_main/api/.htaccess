@@ -1,0 +1,5 @@
+# Redirect all traffic to the versioned public directory
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^ v1/public/ [L]
+</IfModule>
