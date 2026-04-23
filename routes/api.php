@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AuthController;
 #use App\Services\BookingService;
 
 /*
@@ -17,7 +18,13 @@ use App\Http\Controllers\BookingController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-/* Evnet Route*/
+
+/* v1 Auth Routes */
+Route::prefix('v1')->group(function () {
+    Route::post('auth/login', [AuthController::class, 'login']);
+});
+
+/* Event Route */
 Route::apiResource('events', EventController::class);
 // View a single event
 Route::get('/events/{id}', [EventController::class, 'show']);
@@ -25,10 +32,11 @@ Route::get('/events/{id}', [EventController::class, 'show']);
 Route::put('/events/{id}', [EventController::class, 'update']);
 // Delete an event
 Route::delete('/events/{id}', [EventController::class, 'destroy']);
-/* End Evnet Route*/
+/* End Event Route */
 
 Route::apiResource('attendees', AttendeeController::class)->only(['store', 'index']);
 Route::post('bookings', [BookingController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
