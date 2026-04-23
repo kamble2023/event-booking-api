@@ -7,6 +7,29 @@ define('LARAVEL_START', microtime(true));
 
 /*
 |--------------------------------------------------------------------------
+| Sanity-check: bootstrap paths must exist before loading the framework.
+| This app is designed to be served from the public/ subdirectory while
+| all application code lives one level up (e.g. api/v1/app/, api/v1/bootstrap/).
+|--------------------------------------------------------------------------
+*/
+$autoloader = __DIR__.'/../vendor/autoload.php';
+if (!file_exists($autoloader)) {
+    http_response_code(503);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Application dependencies not installed. Run: composer install']);
+    exit(1);
+}
+
+$bootstrap = __DIR__.'/../bootstrap/app.php';
+if (!file_exists($bootstrap)) {
+    http_response_code(503);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Application bootstrap file not found. Verify the directory structure.']);
+    exit(1);
+}
+
+/*
+|--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
 |--------------------------------------------------------------------------
 |
@@ -31,7 +54,7 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 |
 */
 
-require __DIR__.'/../vendor/autoload.php';
+require $autoloader;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +67,7 @@ require __DIR__.'/../vendor/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+$app = require_once $bootstrap;
 
 $kernel = $app->make(Kernel::class);
 
