@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/login', [AuthController::class, 'login']);
 });
 
-/* Evnet Route*/
+/* Event Route */
 Route::apiResource('events', EventController::class);
 // View a single event
 Route::get('/events/{id}', [EventController::class, 'show']);
@@ -32,7 +32,7 @@ Route::get('/events/{id}', [EventController::class, 'show']);
 Route::put('/events/{id}', [EventController::class, 'update']);
 // Delete an event
 Route::delete('/events/{id}', [EventController::class, 'destroy']);
-/* End Evnet Route*/
+/* End Event Route */
 
 Route::apiResource('attendees', AttendeeController::class)->only(['store', 'index']);
 Route::post('bookings', [BookingController::class, 'store']);
