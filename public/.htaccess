@@ -5,7 +5,12 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Set the base path to the public directory.
+    # If this app is deployed in a subfolder (e.g. /api/v1/public/),
+    # update RewriteBase to match that path.
+    RewriteBase /api/v1/public/
+
+    # Pass the Authorization header through to PHP (required for Bearer token auth).
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
@@ -17,5 +22,5 @@
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ index.php [L,QSA]
 </IfModule>
