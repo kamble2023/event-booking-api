@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AuthController;
 #use App\Services\BookingService;
 
 /*
@@ -17,6 +18,13 @@ use App\Http\Controllers\BookingController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+/* Auth Route */
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/login', [AuthController::class, 'login']);
+});
+/* End Auth Route */
+
 /* Evnet Route*/
 Route::apiResource('events', EventController::class);
 // View a single event
